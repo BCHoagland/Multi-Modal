@@ -54,7 +54,7 @@ class Dist(nn.Module):
     def sample(self, batch_size=1):
         a = F.softmax(self.α, dim=0) # Converts internal alphas to usable values
         i = torch.multinomial(a, 1) # Sample an index based on the weights of alpha with favorability towards higher weights
-        dist = Normal(self.μ[i], self.σ[i]) # Makes a normal distribution with the ith mu and ith sigma
+        dist = Normal(self.μ[i], self.σ[i].exp()) # Makes a normal distribution with the ith mu and ith sigma
         return dist.sample((batch_size,))
 
     # Find the logarithmic probability of a point across multiple Gaussian distributions
@@ -70,4 +70,4 @@ class Dist(nn.Module):
     # Returns probability of a point in a distribution
     def N(self, x):
         if len(x.shape) == 1: x = torch.FloatTensor(x).unsqueeze(1)
-        return torch.exp(-torch.pow(x - self.μ, 2) / (2 * torch.pow(self.σ, 2))) / torch.sqrt(2 * pi * torch.pow(self.σ, 2))
+        return torch.exp(-torch.pow(x - self.μ, 2) / (2 * torch.pow(self.σ.exp(), 2))) / torch.sqrt(2 * pi * torch.pow(self.σ.exp(), 2))

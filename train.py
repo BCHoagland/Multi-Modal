@@ -3,18 +3,18 @@ import torch
 from dist import Dist
 from visualize import *
 
-epochs = 20000
+epochs = 10000
 lr = 0.05
 batch_size = 128
 vis_iter = 200
 
 # make target distribution
-P = Dist([.2, .2, .3, .1, .2], [-3, 3, 15, 10, -10], [1, 2, 3, 1, 5])
-plot_dist(P, 'P', '#4A04D4')
+P = Dist([.1, .3, .4, .1, .1], [-3, 3, 15, 10, -10], [1, 2, 3, 1, 5])
+plot_dist(P, 'P', '#ff8200')
 
 # make training distribution
 Q = Dist(K=10, requires_grad=True)
-plot_dist(Q, 'Q', '#CB7EFF')
+plot_dist(Q, 'Q', '#4A04D4')
 
 # make optimizer for training distribution
 optimizer = torch.optim.Adam(Q.parameters(), lr=lr)
@@ -28,6 +28,6 @@ for epoch in range(int(epochs)):
     loss.backward()
     optimizer.step()
 
-    if epoch % vis_iter == vis_iter - 1:
+    if epoch % viz_iter == viz_iter - 1:
         plot_loss(loss, '#4A04D4')
-        plot_dist(Q, 'Q', '#CB7EFF')
+        plot_dist(Q, 'Q', '#4A04D4')

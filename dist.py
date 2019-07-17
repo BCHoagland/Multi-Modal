@@ -11,7 +11,7 @@ from math import pi
 
 
 class Dist(nn.Module):
-    def __init__(self, a=None, m=None, s=None, scale=1, K=None, requires_grad=False):
+    def __init__(self, a=None, m=None, s=None, K=None, requires_grad=False):
         super().__init__()
 
         self.K = K
@@ -30,7 +30,6 @@ class Dist(nn.Module):
         self.a = init_weights(a)
         self.m = init_weights(m)
         self.s = init_weights(s, log=False)
-        self.scale = torch.tensor(float(scale), requires_grad=True)
 
         self.dists = [Normal(m, s) for (m, s) in zip(self.m, self.s)]
 
@@ -38,12 +37,12 @@ class Dist(nn.Module):
         return f'Normal distribution with parameters\n\tα: {self.a.tolist()}\n\tμ: {self.m.tolist()}\n\tσ: {self.s.exp().tolist()}'
 
     def parameters(self):
-        return [self.a, self.m, self.s, self.scale]
+        return [self.a, self.m, self.s]
 
     def forward(self, x):
         x = torch.FloatTensor(x)
         a = F.softmax(self.a, dim=0)
-        return self.scale * torch.sum(a * self.N(x), dim=1)
+        return torch.sum(a * self.N(x), dim=1)
 
     def sample(self, batch_size=1):
         a = F.softmax(self.a, dim=0)

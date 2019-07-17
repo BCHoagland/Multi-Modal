@@ -9,12 +9,12 @@ lr = 0.01
 batch_size = 128
 
 # make target distribution
-P = Dist([.2, .2, .3, .1, .2], [-3, 3, 15, 10, -10], [1, 2, 3, 1, 5], 3)
-plot_dist(P, 'P')
+P = Dist([.2, .2, .3, .1, .2], [-3, 3, 15, 10, -10], [1, 2, 3, 1, 5])
+plot_dist(P, 'P', '#4A04D4')
 
 # make training distribution
-Q = Dist(K=20, requires_grad=True)
-plot_dist(Q, 'Q')
+Q = Dist(K=10, requires_grad=True)
+plot_dist(Q, 'Q', '#CB7EFF')
 
 # make optimizer for training distribution
 optimizer = torch.optim.Adam(Q.parameters(), lr=lr)
@@ -33,8 +33,8 @@ for epoch in range(int(epochs)):
     optimizer.step()
 
     if epoch % (epochs // 200) == (epochs // 200) - 1:
-        plot_loss(loss)
-        plot_dist(Q, 'Q')
+        plot_loss(loss, '#4A04D4')
+        plot_dist(Q, 'Q', '#CB7EFF')
 
 print(f'Desired: {P.a.tolist()}, {P.scale.tolist()}')
 print(f'Actual: {Q.a.tolist()}, {Q.scale.tolist()}')

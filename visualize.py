@@ -42,14 +42,12 @@ def plot_dist(dist, dist_name, color):
             get_line(list(range(len(points))), points, key, color=c)
         )
 
-    # set format for the plot
     layout = dict(
         title=title,
         # xaxis={'title': 'x'},
         # yaxis={'title': 'y'}
     )
 
-    # plot the data
     viz._send({'data': data, 'layout': layout, 'win': win})
 
 def plot_loss(loss, color):

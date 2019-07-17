@@ -35,6 +35,3 @@ for epoch in range(int(epochs)):
     if epoch % (epochs // 200) == (epochs // 200) - 1:
         plot_loss(loss, '#4A04D4')
         plot_dist(Q, 'Q', '#CB7EFF')
-
-print(f'Desired: {P.a.tolist()}, {P.scale.tolist()}')
-print(f'Actual: {Q.a.tolist()}, {Q.scale.tolist()}')

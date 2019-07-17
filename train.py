@@ -23,7 +23,7 @@ optimizer = torch.optim.Adam(Q.parameters(), lr=lr)
 # run optimization steps on batches of output from target distribution
 for epoch in range(int(epochs)):
     x = P.sample(batch_size)
-    loss = torch.pow(Q(x) - P(x), 2).mean() # np.MSE()
+    loss = torch.pow(Q(x) - P(x), 2).mean() # GET MSE
     # loss += torch.pow(P.log_prob(x) - Q.log_prob(x), 2).mean()
     loss += -Q.log_prob(x).mean() * max(0, (1 - (epoch / (epochs / 2))))                        # anneal entropy bonus for smoother final fitting
 

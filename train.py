@@ -28,6 +28,6 @@ for epoch in range(int(epochs)):
     loss.backward()
     optimizer.step()
 
-    if epoch % viz_iter == viz_iter - 1:
+    if epoch % vis_iter == vis_iter - 1:
         plot_loss(loss, '#4A04D4')
         plot_dist(Q, 'Q', '#4A04D4')

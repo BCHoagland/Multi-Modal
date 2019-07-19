@@ -5,7 +5,7 @@ from gym import spaces
 
 layers = 3
 
-class Gridworld(gym.Env):
+class Nodeworld(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):

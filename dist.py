@@ -9,6 +9,8 @@ class Dist(nn.Module):
     def __init__(self, a=None, m=None, s=None, K=None, requires_grad=False):
         super().__init__()
 
+        self.requires_grad = requires_grad
+
         assert(any([True for x in [a, m, s, K] if x is not None]))
 
         self.K = K                                          # the max number of modes in the distribution
@@ -36,12 +38,13 @@ class Dist(nn.Module):
         return f'Normal distribution with parameters\n\tα: {F.softmax(self.α, dim=0).tolist()}\n\tμ: {self.μ.tolist()}\n\tσ: {self.σ.exp().tolist()}'
 
     def __mul__(self, other, clone=True):
-        d = self if not clone else deepcopy(self)
+        with torch.no_grad():
+            d = self if not clone else Dist(self.α, self.μ, self.σ.exp(), requires_grad=self.requires_grad)
         if isinstance(other, Dist):
             raise NotImplementedError
         else:
-            d.μ *= other
-            d.σ = (d.σ.exp() * abs(other)).log()
+            d.μ = d.μ * other
+            d.σ = (d.σ.exp() * max(abs(other), 1e-10)).log()
         return d
 
     def __rmul__(self, other):
@@ -51,14 +54,15 @@ class Dist(nn.Module):
         return self.__mul__(other, clone=False)
 
     def __add__(self, other, clone=True):
-        d = self if not clone else deepcopy(self)
+        with torch.no_grad():
+            d = self if not clone else Dist(self.α, self.μ, self.σ.exp(), requires_grad=self.requires_grad)
         if isinstance(other, Dist):
             # d.μ = (d.α * d.μ) + (other.α * other.μ)
             # d.σ = (d.α.pow(2) * d.σ.exp().pow(2) + other.α.pow(2) * other.σ.exp().pow(2)).sqrt().log()
             # d.α = torch.ones(self.K)
             raise NotImplementedError
         else:
-            d.μ += other
+            d.μ = d.μ + other
         return d
 
     def __radd__(self, other):

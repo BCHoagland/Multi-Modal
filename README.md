@@ -17,8 +17,7 @@ Start a local Visdom server in isolation with the command `visdom`
 
 
 ## Default Scripts
-* **bellman**
-Forms an approximation of the value distribution Z in the form of the distributional Bellman equation `Z(s, a) = r + γ Z(s', a')`, then fits a Gaussian mixture distribution to `Z` by minimizing cross entropy
+* **bellman:** Forms an approximation of the value distribution Z in the form of the distributional Bellman equation `Z(s, a) = r + γ Z(s', a')`, then fits a Gaussian mixture distribution to `Z` by minimizing cross entropy
 
 * **gridworld:** Approximates reward distributions for each non-terminal state-action pair in a simple discrete environment. It's not actually a grid world so I don't know why I named it that
 

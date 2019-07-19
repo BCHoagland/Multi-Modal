@@ -51,4 +51,4 @@ for epoch in range(int(epochs)):
 # plot final Z distributions
 for s in range(num_states // 2):             # // 2 just for gridworld
     for a in range(num_acts):
-        plot_dist(Z[s][a], f'{s}-{a}', f'rgb(0, {s * 100}, {a * 100})')
+        plot_dist(Z[s][a], f'{s}-{a}', f'rgb(0, {s * 100}, {a * 100})', (0, 10))

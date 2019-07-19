@@ -4,8 +4,8 @@ from dist import Dist
 from visualize import *
 
 lr = 0.05
-epochs = 100
-vis_iter = 50
+epochs = 20000
+vis_iter = 100
 
 # next value distribution
 z2 = Dist([0.2, 0.3, 0.5], [3, 7, 12], [1, 2, 1])

@@ -27,39 +27,41 @@ def get_line(x, y, name, color='#000', isFilled=False, fillcolor='transparent', 
             showlegend=showlegend
         )
 
-def plot_dist(dist, dist_name, color):
+def plot_dist(dist, dist_name='dist', color='#000', range=(0, 20)):
     win = 'dist'
     title = 'Distributions'
 
+    x = np.linspace(range[0], range[1], 100)
+
     if 'dist' not in d:
         d['dist'] = {}
-    d['dist'][dist_name] = (dist(np.linspace(-20, 20, 1000)).tolist(), color)
+    d['dist'][dist_name] = (dist(x).tolist(), color)
 
     data = []
     for key in d['dist']:
         points, c = d['dist'][key]
         data.append(
-            get_line(list(range(len(points))), points, key, color=c)
+            get_line(list(x), points, key, color=c, showlegend=True)
         )
 
     layout = dict(
         title=title,
-        # xaxis={'title': 'x'},
-        # yaxis={'title': 'y'}
+        xaxis={'title': 'Value'},
+        yaxis={'title': 'Probability Density'}
     )
 
     viz._send({'data': data, 'layout': layout, 'win': win})
 
-def plot_loss(loss, color):
+def plot_loss(epoch, loss, color='#000'):
     win = 'loss'
     title = 'Loss'
 
     if 'loss' not in d:
         d['loss'] = []
-    d['loss'].append(loss.item())
+    d['loss'].append((epoch, loss.item()))
 
-    points = d['loss']
-    data = [get_line(list(range(len(points))), points, 'loss', color=color)]
+    x, y = zip(*d['loss'])
+    data = [get_line(x, y, 'loss', color=color)]
 
     layout = dict(
         title=title,

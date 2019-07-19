@@ -1,33 +1,28 @@
-import torch
+import os, sys, importlib
+from termcolor import colored
 
-from dist import Dist
-from visualize import *
+try:
+    f = sys.argv[1]
+    if '.py' in f: f = f[:-3]
+    script = 'scripts.' + f
 
-epochs = 10000
-lr = 0.05
-batch_size = 128
-vis_iter = 200
+    print('🐉  Running script ' + colored(f, 'cyan'))
+    importlib.import_module(script)
+    print('🦄  It\'s done, my dude\n')
 
-# make target distribution
-P = Dist([.1, .3, .4, .1, .1], [-3, 3, 15, 10, -10], [1, 2, 3, 1, 5])
-plot_dist(P, 'P', '#ff8200')
+except (IndexError, ModuleNotFoundError):
+    com = colored('python train.py {script_name}', 'yellow')
+    print('\nYou\'re an idiot ❤️')
+    print('You need to specify which script to execute as so:\n' + com)
 
-# make training distribution
-Q = Dist(K=10, requires_grad=True)
-plot_dist(Q, 'Q', '#4A04D4')
+    scripts = [f[:-3] for f in os.listdir('scripts') if '.py' in f]
+    print('\n🍺  ' + colored('Available Scripts:', 'cyan'))
+    for script in scripts:
+        print(' + ' + script)
 
-# make optimizer for training distribution
-optimizer = torch.optim.Adam(Q.parameters(), lr=lr)
+except KeyboardInterrupt:
+    com = colored('Cancelled', 'red')
+    sys.stdout.write(f'\r🦀  Oh no it\'s the cancel crab\n{com}\n')
 
-# run optimization steps on batches of output from target distribution
-for epoch in range(int(epochs)):
-    x = P.sample(batch_size)
-    loss = torch.pow(Q(x) - P(x), 2).mean()                                             # what about cross entropy instead
-
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-
-    if epoch % vis_iter == vis_iter - 1:
-        plot_loss(loss, '#4A04D4')
-        plot_dist(Q, 'Q', '#4A04D4')
+except:
+    raise

@@ -4,7 +4,7 @@ from dist import Dist
 from visualize import *
 
 lr = 0.05
-epochs = 20000
+epochs = 10000
 vis_iter = 100
 
 # next value distribution
@@ -21,8 +21,8 @@ Q = Dist(K=10, requires_grad=True)
 optimizer = torch.optim.Adam(Q.parameters(), lr=lr)
 
 for epoch in range(int(epochs)):
-    x = z.sample()
-    loss = -Q.log_prob(x)
+    x = z.sample(10)
+    loss = -Q.log_prob(x).mean()
 
     optimizer.zero_grad()
     loss.backward()

@@ -81,6 +81,11 @@ class Dist(nn.Module):
         a = F.softmax(self.α, dim=0)                # given a lot of numbers, it remaps them such that their sum == 1
         return torch.sum(a * self.N(x), dim=1)      # Calculates the normal distr. for each value of x * the softmaxed alpha
 
+    # Return the mean of the Gaussian mixture
+    def mean(self):
+        a = F.softmax(self.α, dim=0)
+        return torch.sum(a * self.μ, dim=0)
+
     # Fetches a sample from the entire Gaussian mixture
     def sample(self, batch_size=1):
         with torch.no_grad():

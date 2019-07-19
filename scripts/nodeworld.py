@@ -13,9 +13,9 @@ from charles.models import *
 class Config:
     batch_size = 1                              # has to be 1
 
-lr = 0.05
+lr = 0.02
 vis_iter = 50
-epochs = 10000
+epochs = 20000
 
 # make environment and get environment details
 env = gym.make('Nodeworld-v0')
@@ -59,8 +59,8 @@ for epoch in range(int(epochs)):
     z_targ = r + (0.99 * m * z2)
 
     # sample from the target distribution and minimize the cross entropy of Z based on this sample
-    x = z_targ.sample()
-    dist_loss = -z.log_prob(x)
+    x = z_targ.sample(10)
+    dist_loss = -z.log_prob(x).mean()
 
     # take an optimization step to improve Z
     optimizers[s][a].zero_grad()
@@ -74,4 +74,4 @@ for epoch in range(int(epochs)):
 # plot final Z distributions
 for s in range(num_states // 2):                                                # // 2 just for gridworld
     for a in range(num_acts):
-        plot_dist(Z[s][a], f'{s}-{a}', f'rgb(0, {s * 100}, {a * 100})', (0, 10))
+        plot_dist(Z[s][a], f'{s}-{a}', f'rgb(0, {s * 40}, {a * 100})', (0, 30))

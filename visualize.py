@@ -27,6 +27,7 @@ def get_line(x, y, name, color='#000', isFilled=False, fillcolor='transparent', 
             showlegend=showlegend
         )
 
+
 def plot_dist(dist, dist_name='dist', color='#000', range=(0, 20)):
     win = 'dist'
     title = 'Distributions'
@@ -52,6 +53,7 @@ def plot_dist(dist, dist_name='dist', color='#000', range=(0, 20)):
 
     viz._send({'data': data, 'layout': layout, 'win': win})
 
+
 def plot_loss(epoch, loss, color='#000'):
     win = 'loss'
     title = 'Loss'
@@ -67,6 +69,26 @@ def plot_loss(epoch, loss, color='#000'):
         title=title,
         xaxis={'title': 'Iterations'},
         yaxis={'title': 'Loss'}
+    )
+
+    viz._send({'data': data, 'layout': layout, 'win': win})
+
+
+def plot_reward(t, r, color='#000'):
+    win = 'reward'
+    title = 'Episodic Reward'
+
+    if 'reward' not in d:
+        d['reward'] = []
+    d['reward'].append((t, float(r)))
+
+    x, y = zip(*d['reward'])
+    data = [get_line(x, y, 'reward', color=color)]
+
+    layout = dict(
+        title=title,
+        xaxis={'title': 'Episodes'},
+        yaxis={'title': 'Cumulative Reward'}
     )
 
     viz._send({'data': data, 'layout': layout, 'win': win})

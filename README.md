@@ -4,6 +4,8 @@
 * NumPy
 * Visdom
 * PyTorch
+* Termcolor
+* Gym
 
 
 
@@ -24,3 +26,5 @@ Start a local Visdom server in isolation with the command `visdom`
 * **bellman:** Forms an approximation of the value distribution Z in the form of the distributional Bellman equation `Z(s, a) = r + γ Z(s', a')`, then fits a Gaussian mixture distribution to `Z` by minimizing cross entropy
 
 * **nodeworld:** Approximates return distributions for each non-terminal state-action pair in a simple discrete environment
+
+* **online_z:** Online learning in a simple discrete environment using Z approximations to choose actions
